@@ -2,19 +2,17 @@
 
 import { supabaseAdmin } from '@/lib/supabase'
 import { cookies } from 'next/headers'
+import { revalidatePath } from 'next/cache'
 
 export async function saveItem(fd: FormData, isNew: boolean) {
-  const variantesRaw = (fd.get('nombre') as string) // sanity
-  void variantesRaw
-
-  const nombre    = fd.get('nombre') as string
-  const catId     = fd.get('category_id') as string
-  const precioRaw = fd.get('precio') as string
-  const precio    = precioRaw ? parseFloat(precioRaw) : null
-  const imagen    = (fd.get('imagen') as string) || null
-  const varStr    = (fd.get('variantes') as string) || ''
-  const variantes = varStr ? varStr.split(',').map(s => s.trim()).filter(Boolean) : []
-  const orden     = parseInt(fd.get('orden') as string) || 0
+  const nombre     = fd.get('nombre') as string
+  const catId      = fd.get('category_id') as string
+  const precioRaw  = fd.get('precio') as string
+  const precio     = precioRaw !== '' ? parseFloat(precioRaw) : null
+  const imagen     = (fd.get('imagen') as string) || null
+  const varStr     = (fd.get('variantes') as string) || ''
+  const variantes  = varStr ? varStr.split(',').map(s => s.trim()).filter(Boolean) : []
+  const orden      = parseInt(fd.get('orden') as string) || 0
   const disponible = fd.get('disponible') === 'on'
   const preciosRaw = (fd.get('precios') as string) || ''
 
@@ -22,15 +20,16 @@ export async function saveItem(fd: FormData, isNew: boolean) {
 
   if (isNew) {
     const { data } = await supabaseAdmin.from('menu_items').insert(payload).select('id').single()
-    if (data && preciosRaw) {
-      await savePrices(data.id, preciosRaw)
-    }
+    if (data && preciosRaw) await savePrices(data.id, preciosRaw)
   } else {
     const id = parseInt(fd.get('id') as string)
     await supabaseAdmin.from('menu_items').update(payload).eq('id', id)
     await supabaseAdmin.from('item_prices').delete().eq('item_id', id)
     if (preciosRaw) await savePrices(id, preciosRaw)
   }
+
+  revalidatePath('/')
+  revalidatePath('/admin')
 }
 
 async function savePrices(itemId: number, raw: string) {
@@ -38,13 +37,13 @@ async function savePrices(itemId: number, raw: string) {
     const [label, valor] = s.split(':')
     return { item_id: itemId, label: label.trim(), valor: parseFloat(valor) }
   }).filter(e => e.label && !isNaN(e.valor))
-  if (entries.length) {
-    await supabaseAdmin.from('item_prices').insert(entries)
-  }
+  if (entries.length) await supabaseAdmin.from('item_prices').insert(entries)
 }
 
 export async function deleteItem(id: number) {
   await supabaseAdmin.from('menu_items').delete().eq('id', id)
+  revalidatePath('/')
+  revalidatePath('/admin')
 }
 
 export async function saveCategory(fd: FormData, isNew: boolean) {
@@ -59,13 +58,17 @@ export async function saveCategory(fd: FormData, isNew: boolean) {
     const id = fd.get('id') as string
     await supabaseAdmin.from('menu_categories').update({ nombre, emoji, orden }).eq('id', id)
   }
+
+  revalidatePath('/')
+  revalidatePath('/admin')
 }
 
 export async function deleteCategory(id: string) {
   await supabaseAdmin.from('menu_categories').delete().eq('id', id)
+  revalidatePath('/')
+  revalidatePath('/admin')
 }
 
 export async function logout() {
-  const cookieStore = await cookies()
-  cookieStore.delete('admin_auth')
+  cookies().delete('admin_auth')
 }
