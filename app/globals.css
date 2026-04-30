@@ -95,3 +95,34 @@ body {
 .cartel-glow {
   animation: cartelGlow 3s ease-in-out infinite;
 }
+
+/* ── Admin panel utilities ───────────────────── */
+.btn-gold {
+  background-color: #C9922A;
+  color: #0D0D0D;
+  font-family: var(--font-oswald), sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+}
+.btn-gold:hover { background-color: #F0B429; }
+.btn-gold:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.input-field {
+  width: 100%;
+  background-color: #0D0D0D;
+  border: 1px solid rgba(201,146,42,0.3);
+  border-radius: 0.5rem;
+  padding: 0.625rem 1rem;
+  color: #F5EDD8;
+  font-family: var(--font-oswald), sans-serif;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.input-field:focus { border-color: #F0B429; }
+.input-field:disabled { opacity: 0.4; cursor: not-allowed; }
+.input-field option { background-color: #1a1a1a; }

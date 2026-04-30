@@ -3,9 +3,13 @@ import CategoryTabs from '@/components/CategoryTabs'
 import MenuSection from '@/components/MenuSection'
 import WhatsAppButton from '@/components/WhatsAppButton'
 import Footer from '@/components/Footer'
-import { menuData } from '@/lib/menu'
+import { getMenuData } from '@/lib/menu'
 
-export default function Home() {
+export const dynamic = 'force-dynamic'
+
+export default async function Home() {
+  const menuData = await getMenuData()
+
   return (
     <main className="min-h-screen bg-guero-bg pb-24">
       <CartelHero />
