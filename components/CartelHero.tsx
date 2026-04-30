@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import HorarioBadge from './HorarioBadge'
 
 export default function CartelHero() {
   return (
@@ -77,6 +78,9 @@ export default function CartelHero() {
           <p className="font-heading text-[10px] text-guero-cream/35 leading-relaxed">
             Blvd. Bonampak, Col. Maya Lacanhá<br />Palenque, Chiapas
           </p>
+
+          {/* Horario badge */}
+          <HorarioBadge />
         </div>
       </div>
     </section>

@@ -14,12 +14,38 @@ const oswald = Oswald({
   display: 'swap',
 })
 
+const BASE_URL = 'https://menu-guero.vercel.app'
+
 export const metadata: Metadata = {
-  title: 'Taquería El Güero · Menú',
-  description: 'Menú digital de Taquería El Güero — El Arte del Sabor. Tacos, tortas, quesadillas y aguas. Horario: 7:00 PM – 11:00 PM.',
+  metadataBase: new URL(BASE_URL),
+  title: 'Taquería El Güero — Menú Digital',
+  description: 'Tacos, tortas, quesadillas y aguas frescas. Palenque, Chiapas · Lun–Dom 6:00 PM – 12:00 AM · Servicio a domicilio con costo extra.',
+  keywords: ['taquería', 'tacos', 'Palenque', 'Chiapas', 'El Güero', 'menú', 'tortas', 'quesadillas'],
   openGraph: {
-    title: 'Taquería El Güero',
-    description: 'El Arte del Sabor',
+    type: 'website',
+    url: BASE_URL,
+    siteName: 'Taquería El Güero',
+    title: 'Taquería El Güero — El Arte del Sabor',
+    description: 'Tacos, tortas, quesadillas y aguas frescas en Palenque, Chiapas. Abierto Lun–Dom 6 PM – 12 AM.',
+    images: [
+      {
+        url: '/cartel.jpeg',
+        width: 1200,
+        height: 600,
+        alt: 'Taquería El Güero — El Arte del Sabor',
+      },
+    ],
+    locale: 'es_MX',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Taquería El Güero — El Arte del Sabor',
+    description: 'Tacos, tortas, quesadillas y aguas frescas en Palenque, Chiapas.',
+    images: ['/cartel.jpeg'],
+  },
+  icons: {
+    icon: '/logo.jpeg',
+    apple: '/logo.jpeg',
   },
 }
 
